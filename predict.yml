@@ -30,6 +30,6 @@ jobs:
         run: |
           git config user.name  "tanknu-bot"
           git config user.email "bot@vandaagtanken.nl"
-          git add prediction.json
+          git add prediction.json prediction_diesel.json
           git diff --staged --quiet || git commit -m "chore: daily price prediction $(date -u +%Y-%m-%d)"
           git push

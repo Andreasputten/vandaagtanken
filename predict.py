@@ -30,7 +30,7 @@ BARREL_TO_LITRES    = 158.987  # 1 barrel = 158.987 litres
 REFINING_YIELD      = 0.445    # ~44.5% of a barrel becomes usable petrol
 REFINING_COST       = 0.055    # €/L refining + transport
 MARGE               = 0.18     # €/L oil company + station margin
-STATION_KORTING     = 0.30     # avg discount vs GLA at non-highway stations
+STATION_KORTING     = 0.32     # avg discount vs GLA at non-highway stations
 # Price lag: Brent → NL pump (days). Rises faster than falls (asymmetric).
 LAG_RISING          = 4        # days until price rise hits pump
 LAG_FALLING         = 6        # days until price drop hits pump
@@ -474,6 +474,75 @@ def main():
         json.dump(output, f, indent=2)
 
     print("Written to prediction.json")
+
+    # ── Diesel prediction ─────────────────────────────────────────────────────
+    # Diesel GLA from brandstof-zoeker.nl (scrape diesel page)
+    DIESEL_ACCIJNS   = 0.5523
+    DIESEL_KORTING   = 0.20
+    DIESEL_MARGE     = 0.18
+    DIESEL_REFINING  = 0.065  # iets hogere raffinagekosten voor diesel
+
+    def brent_to_diesel_gla(brent_usd, eur_usd):
+        crude_eur  = (brent_usd / BARREL_TO_LITRES) / eur_usd
+        product    = crude_eur / REFINING_YIELD + DIESEL_REFINING
+        pre_btw    = product + DIESEL_ACCIJNS + COVA_PER_LITRE + DIESEL_MARGE
+        return round(pre_btw * (1 + BTW_RATE), 3)
+
+    # Scrape diesel GLA
+    try:
+        diesel_html = fetch_url("https://www.brandstof-zoeker.nl/adviesprijzen/diesel/")
+        diesel_match = re.search(r'benzineprijs op .+? is\s*[€]\s*([\d,]+)', diesel_html)
+        diesel_gla = float(diesel_match.group(1).replace(',', '.')) if diesel_match else brent_to_diesel_gla(current_brent, eurusd)
+        print(f"Diesel GLA: €{diesel_gla:.3f}")
+    except Exception as e:
+        print(f"Diesel scrape failed: {e}")
+        diesel_gla = brent_to_diesel_gla(current_brent, eurusd)
+
+    # Diesel forecast
+    diesel_forecast = []
+    for f in forecast:
+        delta = f["pump_proj"] - base_gla
+        diesel_forecast.append({
+            "date":       f["date"],
+            "brent_proj": f["brent_proj"],
+            "pump_proj":  round(diesel_gla + delta, 3),
+        })
+
+    # Diesel signal
+    diesel_diff_3d = diesel_forecast[2]["pump_proj"] - diesel_gla if len(diesel_forecast) >= 3 else 0
+    diesel_pct     = round((diesel_diff_3d / diesel_gla) * 100, 1) if diesel_gla else 0
+    if diesel_diff_3d > 0.01:
+        diesel_advies = "ja"
+        diesel_reden  = f"De dieselprijs wordt naar verwachting +{diesel_pct}% hoger de komende dagen."
+    elif diesel_diff_3d < -0.01:
+        diesel_advies = "nee"
+        diesel_reden  = f"De dieselprijs wordt naar verwachting {diesel_pct}% lager de komende dagen."
+    else:
+        diesel_advies = "maakt_niet_uit"
+        diesel_reden  = "De dieselprijs blijft naar verwachting stabiel de komende dagen."
+
+    diesel_output = {
+        "updated":             datetime.now(timezone.utc).isoformat(),
+        "predicted_pump":      diesel_gla,
+        "pump_voor_gebruiker": round(diesel_gla - DIESEL_KORTING, 2),
+        "station_korting":     DIESEL_KORTING,
+        "direction":           direction,
+        "advies":              diesel_advies,
+        "reden":               diesel_reden,
+        "nieuws":              None,
+        "forecast":            diesel_forecast,
+        "breakdown": {
+            "accijns": DIESEL_ACCIJNS,
+            "cova":    COVA_PER_LITRE,
+            "btw_pct": BTW_RATE * 100,
+            "marge":   DIESEL_MARGE,
+        }
+    }
+
+    with open("prediction_diesel.json", "w") as f:
+        json.dump(diesel_output, f, indent=2)
+
+    print("Written to prediction_diesel.json")
     return output
 
 

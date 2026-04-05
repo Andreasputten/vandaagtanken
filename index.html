@@ -56,6 +56,51 @@
   body.bg-ja  .seg,
   body.bg-nee .seg { color: #fff !important; }
 
+  /* ── Brandstof schakelaar ── */
+  .schakelaar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background: rgba(0,0,0,0.06);
+    padding: 4px;
+    border-radius: 50px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  body.bg-ja  .schakelaar,
+  body.bg-nee .schakelaar { background: rgba(255,255,255,0.15); }
+
+  .schakelaar-btn {
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.4rem 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--zacht);
+    transition: all 0.2s;
+  }
+
+  .schakelaar-btn.actief {
+    background: #fff;
+    color: var(--tekst);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  body.bg-ja  .schakelaar-btn,
+  body.bg-nee .schakelaar-btn { color: rgba(255,255,255,0.6); }
+
+  body.bg-ja  .schakelaar-btn.actief,
+  body.bg-nee .schakelaar-btn.actief {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+
   /* ── Main section ── */
   .hoofd {
     text-align: center;
@@ -360,8 +405,13 @@
 </head>
 <body>
 
+<div class="schakelaar">
+  <button class="schakelaar-btn actief" id="btnBenzine" onclick="schakel('benzine')">Benzine</button>
+  <button class="schakelaar-btn" id="btnDiesel" onclick="schakel('diesel')">Diesel</button>
+</div>
+
 <div class="hoofd">
-  <p class="vraag">Vandaag tanken?</p>
+  <p class="vraag" id="vraagTekst">Vandaag tanken?</p>
   <div id="antwoord" class="laden"><span class="dot">…</span></div>
   <p id="reden"></p>
 
@@ -413,9 +463,12 @@
 </footer>
 
 <script>
-// ── Load prediction.json (published via GitHub Pages) ────────────────────
-// When running locally, fall back to inline demo data.
-const JSON_URL = 'prediction.json';  // same folder; on GitHub Pages this is the committed file
+const JSON_URL    = 'prediction.json';
+const JSON_DIESEL = 'prediction_diesel.json';
+
+let huidigeBrandstof = 'benzine';
+let benzineData = null;
+let dieselData  = null;
 
 async function laadData() {
   try {
@@ -423,6 +476,162 @@ async function laadData() {
     if (!r.ok) throw new Error('not found');
     return await r.json();
   } catch(e) {
+    return {
+      updated: new Date().toISOString(),
+      predicted_pump: 2.595,
+      pump_voor_gebruiker: 2.28,
+      station_korting: 0.32,
+      direction: 'rising',
+      advies: 'ja',
+      reden: 'De pompprijs wordt naar verwachting +1.2% hoger de komende dagen.',
+      nieuws: null,
+      forecast: [
+        { date: '2026-04-06', brent_proj: 115.1, pump_proj: 2.577 },
+        { date: '2026-04-07', brent_proj: 115.6, pump_proj: 2.584 },
+        { date: '2026-04-08', brent_proj: 116.2, pump_proj: 2.592 },
+        { date: '2026-04-09', brent_proj: 116.5, pump_proj: 2.596 },
+        { date: '2026-04-10', brent_proj: 116.7, pump_proj: 2.599 },
+      ],
+      breakdown: { accijns: 0.797, cova: 0.0085, btw_pct: 21, marge: 0.18 }
+    };
+  }
+}
+
+async function laadDieselData() {
+  try {
+    const r = await fetch(JSON_DIESEL + '?t=' + Date.now());
+    if (!r.ok) throw new Error('not found');
+    return await r.json();
+  } catch(e) {
+    return {
+      updated: new Date().toISOString(),
+      predicted_pump: 2.669,
+      pump_voor_gebruiker: 2.47,
+      station_korting: 0.20,
+      direction: 'rising',
+      advies: 'ja',
+      reden: 'De dieselprijs wordt naar verwachting +0.9% hoger de komende dagen.',
+      nieuws: null,
+      forecast: [
+        { date: '2026-04-06', brent_proj: 115.1, pump_proj: 2.678 },
+        { date: '2026-04-07', brent_proj: 115.6, pump_proj: 2.685 },
+        { date: '2026-04-08', brent_proj: 116.2, pump_proj: 2.691 },
+        { date: '2026-04-09', brent_proj: 116.5, pump_proj: 2.694 },
+        { date: '2026-04-10', brent_proj: 116.7, pump_proj: 2.696 },
+      ],
+      breakdown: { accijns: 0.5523, cova: 0.0085, btw_pct: 21, marge: 0.18 }
+    };
+  }
+}
+
+function dagLabel(iso) {
+  const dagen   = ['zo','ma','di','wo','do','vr','za'];
+  const maanden = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  try {
+    const d = new Date(iso + 'T12:00:00');
+    if (isNaN(d.getTime())) return iso;
+    return dagen[d.getDay()] + ' ' + d.getDate() + ' ' + maanden[d.getMonth()];
+  } catch(e) { return iso; }
+}
+
+function render(d) {
+  const antw  = document.getElementById('antwoord');
+  const reden = document.getElementById('reden');
+  const labels = { ja: 'JA', nee: 'NEE', maakt_niet_uit: 'MAAKT\nNIET UIT', onbekend: '?' };
+  antw.textContent  = labels[d.advies] || '?';
+  antw.className    = d.advies || 'laden';
+  reden.textContent = d.reden || '';
+
+  document.body.classList.remove('bg-ja','bg-nee');
+  if (d.advies === 'ja')  document.body.classList.add('bg-ja');
+  if (d.advies === 'nee') document.body.classList.add('bg-nee');
+
+  const pompPrijs = d.pump_voor_gebruiker || (d.predicted_pump - (d.station_korting || 0.32));
+  document.getElementById('sPump').textContent = '€' + pompPrijs.toFixed(2);
+  document.getElementById('statsRij').classList.add('zichtbaar');
+
+  const korting = d.station_korting || 0.32;
+  const forecastPrijzen = d.forecast.map(f => ({ ...f, pump_proj: f.pump_proj - korting }));
+  const allPumps = [pompPrijs, ...forecastPrijzen.map(f => f.pump_proj)];
+  const minP  = Math.min(...allPumps) - 0.005;
+  const maxP  = Math.max(...allPumps) + 0.005;
+  const range = Math.max(maxP - minP, 0.02);
+  const maxH  = 64;
+
+  const container = document.getElementById('forecastBars');
+  container.innerHTML = '';
+  const vandaag = new Date();
+
+  const makeBar = (pump, label, isToday) => {
+    const h   = Math.max(6, Math.round(((pump - minP) / range) * maxH));
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.innerHTML = `
+      <div class="bar-prijs">€${pump.toFixed(2)}</div>
+      <div class="bar ${isToday ? 'vandaag' : 'stijgt'}" style="height:${h}px"></div>
+      <div class="bar-datum">${label}</div>
+    `;
+    return col;
+  };
+
+  container.appendChild(makeBar(pompPrijs, 'vandaag', true));
+  forecastPrijzen.forEach((f, i) => {
+    const d2 = new Date(vandaag);
+    d2.setDate(d2.getDate() + i + 1);
+    container.appendChild(makeBar(f.pump_proj, dagLabel(d2.toISOString().split('T')[0]), false));
+  });
+  document.getElementById('forecastWrap').classList.add('zichtbaar');
+
+  const pump = d.predicted_pump;
+  const bd   = d.breakdown;
+  const productPct = Math.round(((pump - bd.accijns - bd.cova - bd.marge) / pump) * 100);
+  const accijnsPct = Math.round(((bd.accijns + bd.cova) / pump) * 100);
+  const btwPct     = Math.round((pump * 0.21 / (1 + 0.21)) / pump * 100);
+  const margePct   = Math.round((bd.marge / pump) * 100);
+  const adj        = 100 - (productPct + accijnsPct + btwPct + margePct);
+
+  document.getElementById('breakdownBar').innerHTML = `
+    <div class="seg product"  style="width:${productPct + adj}%">${productPct + adj}%</div>
+    <div class="seg accijns"  style="width:${accijnsPct}%">${accijnsPct}%</div>
+    <div class="seg btw"      style="width:${btwPct}%">${btwPct}%</div>
+    <div class="seg marge"    style="width:${margePct}%">${margePct}%</div>
+  `;
+  document.getElementById('breakdownWrap').classList.add('zichtbaar');
+  document.getElementById('affiliateWrap').classList.add('zichtbaar');
+
+  try {
+    const dt = new Date(d.updated);
+    document.getElementById('bijgewerkt').textContent =
+      'Bijgewerkt: ' + dt.toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+  } catch(e) {}
+}
+
+function schakel(brandstof) {
+  huidigeBrandstof = brandstof;
+  document.getElementById('btnBenzine').classList.toggle('actief', brandstof === 'benzine');
+  document.getElementById('btnDiesel').classList.toggle('actief',  brandstof === 'diesel');
+  document.getElementById('vraagTekst').textContent =
+    brandstof === 'diesel' ? 'Vandaag diesel tanken?' : 'Vandaag tanken?';
+
+  ['statsRij','forecastWrap','breakdownWrap','affiliateWrap'].forEach(id => {
+    document.getElementById(id).classList.remove('zichtbaar');
+  });
+  document.getElementById('antwoord').className = 'laden';
+  document.getElementById('antwoord').innerHTML = '<span class="dot">…</span>';
+
+  setTimeout(() => {
+    if (brandstof === 'diesel' && dieselData) render(dieselData);
+    else if (benzineData) render(benzineData);
+  }, 150);
+}
+
+(async () => {
+  [benzineData, dieselData] = await Promise.all([laadData(), laadDieselData()]);
+  render(benzineData);
+})();
+</script>
+</body>
+</html>
     // Fallback demo data — based on real values 30-03-2026
     return {
       updated: new Date().toISOString(),
@@ -430,9 +639,9 @@ async function laadData() {
       brent_date: '2026-03-28',
       brent_change_pct: 12.4,
       eurusd: 1.079,
-      predicted_pump: 2.570,        // GLA vandaag (brandstof-zoeker.nl)
-      pump_voor_gebruiker: 2.27,    // GLA minus €0,30 gem. korting
-      station_korting: 0.30,
+      predicted_pump: 2.595,        // GLA vandaag (brandstof-zoeker.nl 5-4-2026)
+      pump_voor_gebruiker: 2.28,    // GLA minus €0,32 gem. korting
+      station_korting: 0.32,
       direction: 'rising',
       advies: 'ja',
       reden: 'De pompprijs wordt naar verwachting +1.2% hoger de komende dagen.',
