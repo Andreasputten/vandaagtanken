@@ -1,44 +1,58 @@
 {
-  "updated": "2026-03-30T16:37:33.407665+00:00",
-  "brent_usd": 74.2,
-  "brent_date": "2026-03-28",
-  "brent_change_pct": 2.4,
-  "eurusd": 1.084,
-  "predicted_pump": 2.502,
+  "updated": "2026-04-05T09:07:54.506102+00:00",
+  "brent_usd": 121.88,
+  "brent_date": "2026-03-30",
+  "brent_change_pct": 17.4,
+  "eurusd": 1.1525,
+  "predicted_pump": 2.868,
+  "pump_voor_gebruiker": 2.57,
+  "station_korting": 0.3,
   "direction": "rising",
-  "advies": "maakt_niet_uit",
-  "reden": "Prijs blijft naar verwachting stabiel (\u00b1\u20ac0.02/L). Het maakt niet uit wanneer je tankt.",
+  "advies": "ja",
+  "reden": "De pompprijs wordt naar verwachting +3.8% hoger de komende dagen.",
+  "nieuws": {
+    "kop": "How the Iran War Became NATO\u2019s Biggest Crisis",
+    "datum": "vr 3 apr"
+  },
   "forecast": [
     {
-      "date": "2026-03-31",
-      "brent_proj": 74.5,
-      "pump_proj": 2.507
+      "date": "2026-04-06",
+      "brent_proj": 124.11,
+      "pump_proj": 2.901
     },
     {
-      "date": "2026-04-01",
-      "brent_proj": 74.8,
-      "pump_proj": 2.511
+      "date": "2026-04-07",
+      "brent_proj": 125.89,
+      "pump_proj": 2.927
     },
     {
-      "date": "2026-04-02",
-      "brent_proj": 75.1,
-      "pump_proj": 2.516
+      "date": "2026-04-08",
+      "brent_proj": 127.3,
+      "pump_proj": 2.948
     },
     {
-      "date": "2026-04-03",
-      "brent_proj": 75.4,
-      "pump_proj": 2.521
+      "date": "2026-04-09",
+      "brent_proj": 128.38,
+      "pump_proj": 2.964
     },
     {
-      "date": "2026-04-04",
-      "brent_proj": 75.7,
-      "pump_proj": 2.526
+      "date": "2026-04-10",
+      "brent_proj": 129.17,
+      "pump_proj": 2.976
     }
   ],
+  "cross_check": {
+    "gla_vandaag": null,
+    "model_error": null,
+    "bron": null,
+    "accijns_werkelijk": null,
+    "btw_werkelijk": null,
+    "oliemij_werkelijk": null
+  },
   "breakdown": {
-    "accijns": 0.8447,
+    "accijns": 0.797,
     "cova": 0.0085,
-    "btw_pct": 21,
-    "marge": 0.185
+    "btw_pct": 21.0,
+    "marge": 0.18
   }
 }
