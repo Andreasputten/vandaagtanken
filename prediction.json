@@ -1,44 +1,44 @@
 {
-  "updated": "2026-04-07T10:36:52.342972+00:00",
+  "updated": "2026-04-08T10:40:33.660970+00:00",
   "brent_usd": 121.88,
   "brent_date": "2026-03-30",
   "brent_change_pct": 17.4,
-  "eurusd": 1.1525,
-  "predicted_pump": 2.868,
-  "pump_voor_gebruiker": 2.55,
+  "eurusd": 1.1557,
+  "predicted_pump": 2.863,
+  "pump_voor_gebruiker": 2.54,
   "station_korting": 0.32,
   "direction": "rising",
   "advies": "ja",
-  "reden": "De pompprijs wordt naar verwachting +3.8% hoger de komende dagen.",
+  "reden": "De pompprijs wordt naar verwachting +3.7% hoger de komende dagen.",
   "nieuws": {
-    "kop": "European Gas Futures Jump 3% as Trump&#039;s Iran Strike Deadline Nears",
-    "datum": "di 7 apr"
+    "kop": "China\u2019s Teapot Refiners Rush to Secure Iranian Crude as Oil Prices Slide",
+    "datum": "wo 8 apr"
   },
   "forecast": [
     {
-      "date": "2026-04-08",
-      "brent_proj": 124.11,
-      "pump_proj": 2.901
-    },
-    {
       "date": "2026-04-09",
-      "brent_proj": 125.89,
-      "pump_proj": 2.927
+      "brent_proj": 124.11,
+      "pump_proj": 2.896
     },
     {
       "date": "2026-04-10",
-      "brent_proj": 127.3,
-      "pump_proj": 2.948
+      "brent_proj": 125.89,
+      "pump_proj": 2.922
     },
     {
       "date": "2026-04-11",
-      "brent_proj": 128.38,
-      "pump_proj": 2.964
+      "brent_proj": 127.3,
+      "pump_proj": 2.943
     },
     {
       "date": "2026-04-12",
+      "brent_proj": 128.38,
+      "pump_proj": 2.959
+    },
+    {
+      "date": "2026-04-13",
       "brent_proj": 129.17,
-      "pump_proj": 2.976
+      "pump_proj": 2.97
     }
   ],
   "cross_check": {
