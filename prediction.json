@@ -1,44 +1,44 @@
 {
-  "updated": "2026-04-09T10:45:01.809329+00:00",
+  "updated": "2026-04-10T10:35:25.607891+00:00",
   "brent_usd": 127.61,
   "brent_date": "2026-04-02",
   "brent_change_pct": 12.5,
-  "eurusd": 1.1706,
-  "predicted_pump": 3.034,
-  "pump_voor_gebruiker": 2.71,
+  "eurusd": 1.1685,
+  "predicted_pump": 3.037,
+  "pump_voor_gebruiker": 2.72,
   "station_korting": 0.32,
   "direction": "rising",
   "advies": "ja",
   "reden": "De pompprijs wordt naar verwachting +3.6% hoger de komende dagen.",
   "nieuws": {
-    "kop": "Japan Weighs Releasing More Oil Reserves as Hormuz Risks Persist",
-    "datum": "do 9 apr"
+    "kop": "Gulf Producers Take First Steps Toward Resuming Hormuz Oil Flows",
+    "datum": "vr 10 apr"
   },
   "forecast": [
     {
-      "date": "2026-04-10",
-      "brent_proj": 129.9,
-      "pump_proj": 3.068
-    },
-    {
       "date": "2026-04-11",
-      "brent_proj": 131.74,
-      "pump_proj": 3.095
+      "brent_proj": 129.9,
+      "pump_proj": 3.07
     },
     {
       "date": "2026-04-12",
-      "brent_proj": 133.19,
-      "pump_proj": 3.116
+      "brent_proj": 131.74,
+      "pump_proj": 3.097
     },
     {
       "date": "2026-04-13",
-      "brent_proj": 134.3,
-      "pump_proj": 3.132
+      "brent_proj": 133.19,
+      "pump_proj": 3.118
     },
     {
       "date": "2026-04-14",
+      "brent_proj": 134.3,
+      "pump_proj": 3.135
+    },
+    {
+      "date": "2026-04-15",
       "brent_proj": 135.12,
-      "pump_proj": 3.144
+      "pump_proj": 3.147
     }
   ],
   "cross_check": {
