@@ -1,56 +1,68 @@
-# tanknu.nl — Nederlandse benzineprijs voorspeller
+# vandaagtanken.nl — Moet ik vandaag tanken?
 
-> Moet ik nu tanken? Eén vraag. Één antwoord.
+> Eén vraag. Eén antwoord. Elke dag.
+
+vandaagtanken.nl vertelt Nederlandse automobilisten dagelijks of ze nu moeten tanken of beter kunnen wachten — op basis van de actuele benzineprijs en een verwachting van de komende dagen.
+
+---
 
 ## Hoe het werkt
 
 Het systeem bestaat uit drie onderdelen:
 
-1. **`predict.py`** — Python script dat dagelijks de verwachte NL pompprijs berekent
-2. **`.github/workflows/predict.yml`** — GitHub Actions draait dit script elke ochtend gratis
-3. **`index.html`** — De website leest `prediction.json` en toont het advies
+1. **`predict.py`** — haalt elke ochtend de actuele GLA op en berekent de verwachting
+2. **`.github/workflows/predict.yml`** — GitHub Actions draait dit script dagelijks gratis
+3. **`index.html`** — de site leest `prediction.json` en toont het advies
 
-### Prijsformule
+### Prijsberekening
 
-De NL pompprijs bestaat uit bekende, vaste componenten:
+De getoonde prijs is de officiële Gemiddelde Landelijke Adviesprijs (GLA) minus €0,25 gemiddelde korting:
 
 ```
-Pompprijs = (product_prijs + accijns + COVA + marge) × 1.21 BTW
-
-product_prijs = (Brent $/barrel ÷ 158.987 liter ÷ EUR/USD) ÷ 0.445 yield + raffinagekosten
-accijns       = €0.8447/L (2026, Euro 95)
-COVA heffing  = €0.0085/L
-marge         = €0.185/L
-BTW           = 21%
+Pompprijs = GLA − €0,25 korting
 ```
 
-### Data bronnen (gratis, geen API key)
+De GLA wordt dagelijks opgehaald van brandstof-zoeker.nl — dezelfde bron als UnitedConsumers. Dit is de officiële adviesprijs op basis van de vijf grootste oliemaatschappijen in Nederland.
 
-| Bron | Data | URL |
-|---|---|---|
-| FRED (St. Louis Fed) | Brent $/barrel dagelijks | `fred.stlouisfed.org` |
-| ECB Data Portal | EUR/USD dagelijks | `data-api.ecb.europa.eu` |
+### Forecast
 
-### Vertraging (lag)
+De verwachting voor de komende 5 dagen is gebaseerd op:
 
-Brent prijswijzigingen bereiken de Nederlandse pomp na:
-- **4 dagen** bij prijsstijgingen (stations passen snel aan)
-- **6 dagen** bij prijsdalingen (asymmetrisch — bekend fenomeen)
+- **Brent ruwe olieprijs** (dagelijks via FRED, St. Louis Fed)
+- **Historische gevoeligheid**: ~€0,017 GLA-verandering per $10 Brent-beweging
+- **Momentum decay**: Brent-momentum neemt dagelijks af met 20%
+
+Het advies (JA / NEE / MAAKT NIET UIT) is gebaseerd op de verwachte prijs over 3 dagen.
+
+### Databronnen
+
+| Bron | Data |
+|---|---|
+| brandstof-zoeker.nl | GLA benzine en diesel (dagelijks) |
+| FRED (St. Louis Fed) | Brent olieprijs (dagelijks) |
 
 ---
 
-## Setup (5 minuten)
+## Setup
 
-### 1. Fork deze repository op GitHub
-
-### 2. Zet GitHub Pages aan
+### 1. GitHub Pages aanzetten
 `Settings → Pages → Source: Deploy from branch → main → / (root)`
 
+### 2. Domein koppelen (optioneel)
+`Settings → Pages → Custom domain → vul je domein in`
+
+Voeg deze DNS records toe bij je domeinregistrar:
+
+```
+@    A    185.199.108.153
+@    A    185.199.109.153
+@    A    185.199.110.153
+@    A    185.199.111.153
+www  CNAME jouwgebruikersnaam.github.io
+```
+
 ### 3. Klaar!
-- GitHub Actions draait `predict.py` elke ochtend om 09:00 NL tijd
-- Resultaat wordt opgeslagen in `prediction.json`
-- `index.html` leest dit bestand automatisch
-- Koppel je eigen domein via `Settings → Pages → Custom domain`
+GitHub Actions draait `predict.py` elke ochtend om 09:00 NL tijd en schrijft `prediction.json` en `prediction_diesel.json` weg. De site laadt deze bestanden automatisch.
 
 ### Handmatig draaien
 `Actions → Daily Petrol Price Prediction → Run workflow`
@@ -60,7 +72,8 @@ Brent prijswijzigingen bereiken de Nederlandse pomp na:
 ## Lokaal testen
 
 ```bash
-python predict.py          # genereert prediction.json
+pip install requests
+python predict.py          # genereert prediction.json en prediction_diesel.json
 python -m http.server 8000 # open http://localhost:8000
 ```
 
@@ -72,7 +85,12 @@ python -m http.server 8000 # open http://localhost:8000
 |---|---|
 | GitHub repo + Actions | €0 |
 | GitHub Pages hosting | €0 |
-| FRED API | €0 |
-| ECB API | €0 |
-| Domeinnaam (tanknu.nl) | ~€10/jaar |
+| Databronnen | €0 |
+| Domeinnaam | ~€10/jaar |
 | **Totaal** | **~€10/jaar** |
+
+---
+
+## Affiliate
+
+De site toont een link naar de UnitedConsumers tankpas via het Awin affiliate netwerk. UnitedConsumers geeft minimaal 6 cent korting per liter bij 600+ tankstations in Nederland.
