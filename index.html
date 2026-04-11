@@ -443,20 +443,20 @@
 
 <div class="affiliate-wrap" id="affiliateWrap">
   <div class="affiliate-titel">Altijd goedkoper tanken?</div>
-  <a class="affiliate-kaart" href="https://www.unitedconsumers.com/tanken/?redir=vandaagtanken" target="_blank" rel="noopener">
+  <a class="affiliate-kaart" href="https://www.awin1.com/cread.php?awinmid=8311&awinaffid=2842084" target="_blank" rel="noopener">
     <div class="affiliate-kaart-links">
       <div class="affiliate-naam">UnitedConsumers Tankpas</div>
       <div class="affiliate-omschrijving">6–13 cent korting per liter bij 600+ stations</div>
     </div>
     <div class="affiliate-kaart-rechts">Aanvragen →</div>
   </a>
-  <a class="affiliate-klein" href="https://www.unitedconsumers.com/autoverzekering/?redir=vandaagtanken" target="_blank" rel="noopener">
+  <a class="affiliate-klein" href="https://www.awin1.com/cread.php?awinmid=8311&awinaffid=2842084" target="_blank" rel="noopener">
     Ook besparen op je autoverzekering? →
   </a>
 </div>
 
 <footer>
-  Verwachte GLA gebaseerd op Brent (FRED) + EUR/USD (ECB), dagelijks gecheckt tegen de werkelijke GLA van <a href="https://www.brandstof-zoeker.nl/adviesprijzen/euro95/" target="_blank">brandstof-zoeker.nl</a>. Getoonde prijs = GLA minus gem. korting van €0,30.
+  Verwachte prijs = dagelijkse GLA van <a href="https://www.unitedconsumers.com/tanken/brandstofprijzen" target="_blank">UnitedConsumers</a> (via <a href="https://www.brandstof-zoeker.nl/adviesprijzen/euro95/" target="_blank">brandstof-zoeker.nl</a>) minus €0,25 gem. korting. Forecast gebaseerd op Brent olieprijs (FRED) en historische gevoeligheid.
   <span id="bijgewerkt"></span>
   <span style="display:block; margin-top:0.5rem; padding-top:0.5rem; border-top: 0.5px solid rgba(0,0,0,0.08);">
     Dit is een verwachting op basis van marktdata — geen garantie. Aan de informatie op deze site kunnen geen rechten worden ontleend. Controleer altijd de actuele prijs bij het tankstation.
@@ -479,19 +479,19 @@ async function laadData() {
   } catch(e) {
     return {
       updated: new Date().toISOString(),
-      predicted_pump: 2.595,
-      pump_voor_gebruiker: 2.28,
-      station_korting: 0.32,
-      direction: 'rising',
-      advies: 'ja',
-      reden: 'De pompprijs wordt naar verwachting +1.2% hoger de komende dagen.',
+      predicted_pump: 2.551,
+      pump_voor_gebruiker: 2.30,
+      station_korting: 0.25,
+      direction: 'falling',
+      advies: 'nee',
+      reden: 'De pompprijs wordt naar verwachting -0.8% lager de komende dagen.',
       nieuws: null,
       forecast: [
-        { date: '2026-04-06', brent_proj: 115.1, pump_proj: 2.577 },
-        { date: '2026-04-07', brent_proj: 115.6, pump_proj: 2.584 },
-        { date: '2026-04-08', brent_proj: 116.2, pump_proj: 2.592 },
-        { date: '2026-04-09', brent_proj: 116.5, pump_proj: 2.596 },
-        { date: '2026-04-10', brent_proj: 116.7, pump_proj: 2.599 },
+        { date: '2026-04-12', brent_proj: 107.2, gla_proj: 2.548, pump_proj: 2.30, changed: false },
+        { date: '2026-04-13', brent_proj: 106.6, gla_proj: 2.545, pump_proj: 2.30, changed: false },
+        { date: '2026-04-14', brent_proj: 106.1, gla_proj: 2.542, pump_proj: 2.29, changed: true },
+        { date: '2026-04-15', brent_proj: 105.7, gla_proj: 2.539, pump_proj: 2.29, changed: false },
+        { date: '2026-04-16', brent_proj: 105.4, gla_proj: 2.537, pump_proj: 2.29, changed: false },
       ],
       breakdown: { accijns: 0.797, cova: 0.0085, btw_pct: 21, marge: 0.18 }
     };
@@ -506,21 +506,21 @@ async function laadDieselData() {
   } catch(e) {
     return {
       updated: new Date().toISOString(),
-      predicted_pump: 2.669,
-      pump_voor_gebruiker: 2.47,
+      predicted_pump: 2.696,
+      pump_voor_gebruiker: 2.50,
       station_korting: 0.20,
-      direction: 'rising',
-      advies: 'ja',
-      reden: 'De dieselprijs wordt naar verwachting +0.9% hoger de komende dagen.',
+      direction: 'falling',
+      advies: 'nee',
+      reden: 'De dieselprijs wordt naar verwachting -0.6% lager de komende dagen.',
       nieuws: null,
       forecast: [
-        { date: '2026-04-06', brent_proj: 115.1, pump_proj: 2.678 },
-        { date: '2026-04-07', brent_proj: 115.6, pump_proj: 2.685 },
-        { date: '2026-04-08', brent_proj: 116.2, pump_proj: 2.691 },
-        { date: '2026-04-09', brent_proj: 116.5, pump_proj: 2.694 },
-        { date: '2026-04-10', brent_proj: 116.7, pump_proj: 2.696 },
+        { date: '2026-04-12', brent_proj: 107.2, gla_proj: 2.694, pump_proj: 2.49, changed: true },
+        { date: '2026-04-13', brent_proj: 106.6, gla_proj: 2.692, pump_proj: 2.49, changed: false },
+        { date: '2026-04-14', brent_proj: 106.1, gla_proj: 2.690, pump_proj: 2.49, changed: false },
+        { date: '2026-04-15', brent_proj: 105.7, gla_proj: 2.688, pump_proj: 2.49, changed: false },
+        { date: '2026-04-16', brent_proj: 105.4, gla_proj: 2.687, pump_proj: 2.49, changed: false },
       ],
-      breakdown: { accijns: 0.5523, cova: 0.0085, btw_pct: 21, marge: 0.18 }
+      breakdown: { accijns: 0.524, cova: 0.0085, btw_pct: 21, marge: 0.18 }
     };
   }
 }
@@ -547,17 +547,14 @@ function render(d) {
   if (d.advies === 'ja')  document.body.classList.add('bg-ja');
   if (d.advies === 'nee') document.body.classList.add('bg-nee');
 
-  const korting = d.station_korting || 0.32;
+  const korting = d.station_korting || 0.25;
   const pompPrijs = d.pump_voor_gebruiker || (d.predicted_pump - korting);
   document.getElementById('sPump').textContent = '€' + pompPrijs.toFixed(2);
   document.getElementById('statsRij').classList.add('zichtbaar');
 
-  // Forecast: delta t.o.v. GLA vandaag, toegepast op pompprijs (met korting)
-  const gla_vandaag = d.predicted_pump;
-  const forecastPrijzen = d.forecast.map(f => ({
-    ...f,
-    pump_proj: pompPrijs + (f.pump_proj - gla_vandaag)
-  }));
+  // Forecast: pump_proj is already korting-adjusted from predict.py
+  // Only show bars where price actually changes vs previous day
+  const forecastPrijzen = d.forecast;
   const allPumps = [pompPrijs, ...forecastPrijzen.map(f => f.pump_proj)];
   const minP  = Math.min(...allPumps) - 0.005;
   const maxP  = Math.max(...allPumps) + 0.005;
@@ -566,7 +563,6 @@ function render(d) {
 
   const container = document.getElementById('forecastBars');
   container.innerHTML = '';
-  const vandaag = new Date();
 
   const makeBar = (pump, label, isToday) => {
     const h   = Math.max(6, Math.round(((pump - minP) / range) * maxH));
@@ -581,10 +577,9 @@ function render(d) {
   };
 
   container.appendChild(makeBar(pompPrijs, 'vandaag', true));
-  forecastPrijzen.forEach((f, i) => {
-    const d2 = new Date(vandaag);
-    d2.setDate(d2.getDate() + i + 1);
-    container.appendChild(makeBar(f.pump_proj, dagLabel(d2.toISOString().split('T')[0]), false));
+  forecastPrijzen.forEach((f) => {
+    // Always show all days — just don't change height if price is same
+    container.appendChild(makeBar(f.pump_proj, dagLabel(f.date), false));
   });
   document.getElementById('forecastWrap').classList.add('zichtbaar');
 
