@@ -23,7 +23,7 @@ from datetime import datetime, timedelta, timezone
 
 # ── Constants ────────────────────────────────────────────────────────────────
 STATION_KORTING_BENZINE = 0.25   # avg discount vs GLA (€/L)
-STATION_KORTING_DIESEL  = 0.20   # avg discount vs GLA diesel (€/L)
+STATION_KORTING_DIESEL  = 0.30   # avg discount vs GLA diesel (€/L)
 
 # Empirical sensitivity: GLA change per $10 Brent move (after lag)
 # Derived from historical NL data: oliemij deel ≈ 51% of GLA
@@ -104,54 +104,58 @@ def get_brent_series(days_back=20):
 
 def build_forecast(gla_today, brent_series, sensitivity, korting):
     """
-    Project GLA for next 5 days using Brent momentum.
+    Project pump price for next 5 days, calculated per day independently.
 
-    Logic:
-    - Compute recent Brent daily changes (last 3 days, weighted)
-    - Project forward with decay (trends fade)
-    - Convert Brent change to GLA change using sensitivity
-    - Cap at MAX_DAILY_CHANGE per day
-    - Apply korting to get pump price
-    - Round to 2 decimal places to avoid false precision
-    - Only include in chart if price actually changes vs previous day
+    Per day:
+      1. Project Brent price for that day using momentum + decay
+      2. Calculate GLA delta vs today based on Brent move and sensitivity
+      3. pump_proj = (gla_today + gla_delta) - korting
+
+    The korting is fixed and applied every day the same way.
+    Max GLA change per day capped at €0.02 (realistic daily move).
     """
+    MAX_DAILY_GLA_CHANGE = 0.02  # max €0.02 GLA change per day
+
     if len(brent_series) < 4:
         return []
 
-    # Weighted recent momentum (most recent day weighs most)
+    # Weighted recent Brent momentum
     d1 = brent_series[-1] - brent_series[-2]
     d2 = brent_series[-2] - brent_series[-3]
     d3 = brent_series[-3] - brent_series[-4]
     momentum = (d1 * 0.6) + (d2 * 0.3) + (d3 * 0.1)
 
-    forecast     = []
-    gla_prev     = gla_today
-    brent_prev   = brent_series[-1]
-    today        = datetime.now(timezone.utc).date()
+    forecast   = []
+    brent_prev = brent_series[-1]
+    today      = datetime.now(timezone.utc).date()
+    gla_prev   = gla_today
 
     for i in range(1, 6):
-        # Decay momentum each day
+        # Decay momentum each day (trends fade over time)
         momentum    *= 0.80
         brent_change = momentum
+        brent_proj   = round(brent_prev + brent_change, 2)
 
-        # Convert to GLA change: sensitivity is per $10 move
+        # GLA change for this day based on Brent move
         gla_delta = (brent_change / 10.0) * sensitivity
 
-        # Cap daily change
-        gla_delta = max(min(gla_delta, MAX_DAILY_CHANGE), -MAX_DAILY_CHANGE)
+        # Cap per-day GLA change
+        sign      = 1 if gla_delta >= 0 else -1
+        gla_delta = sign * min(abs(gla_delta), MAX_DAILY_GLA_CHANGE)
 
-        gla_proj     = round(gla_prev + gla_delta, 3)
-        pump_proj    = round(gla_proj - korting, 2)
-        pump_prev    = round(gla_prev - korting, 2)
-        brent_proj   = round(brent_prev + brent_change, 2)
-        date_str     = str(today + timedelta(days=i))
+        # Each day: new GLA = previous day GLA + today's delta
+        gla_proj  = round(gla_prev + gla_delta, 3)
+
+        # Pump price = GLA that day - fixed korting
+        pump_proj = round(gla_proj - korting, 2)
+        pump_prev = round(gla_prev - korting, 2)
 
         forecast.append({
-            "date":        date_str,
-            "brent_proj":  brent_proj,
-            "gla_proj":    gla_proj,
-            "pump_proj":   pump_proj,
-            "changed":     pump_proj != pump_prev,  # for chart: skip if no change
+            "date":       str(today + timedelta(days=i)),
+            "brent_proj": brent_proj,
+            "gla_proj":   gla_proj,
+            "pump_proj":  pump_proj,
+            "changed":    pump_proj != pump_prev,
         })
 
         gla_prev   = gla_proj
