@@ -1,46 +1,46 @@
 {
-  "updated": "2026-04-15T10:44:47.608731+00:00",
-  "brent_usd": 127.61,
-  "brent_change_pct": 12.5,
+  "updated": "2026-04-16T10:48:45.672950+00:00",
+  "brent_usd": 123.28,
+  "brent_change_pct": -3.4,
   "predicted_pump": 2.551,
   "pump_voor_gebruiker": 2.3,
   "station_korting": 0.25,
   "advies": "ja",
-  "reden": "De pompprijs wordt naar verwachting +0.4% hoger de komende dagen.",
+  "reden": "De pompprijs wordt naar verwachting +0.3% hoger de komende dagen.",
   "nieuws": null,
   "forecast": [
     {
-      "date": "2026-04-16",
-      "brent_proj": 130.15,
-      "gla_proj": 2.555,
+      "date": "2026-04-17",
+      "brent_proj": 125.06,
+      "gla_proj": 2.554,
+      "pump_proj": 2.3,
+      "changed": false
+    },
+    {
+      "date": "2026-04-18",
+      "brent_proj": 126.49,
+      "gla_proj": 2.556,
       "pump_proj": 2.31,
       "changed": true
     },
     {
-      "date": "2026-04-17",
-      "brent_proj": 132.18,
+      "date": "2026-04-19",
+      "brent_proj": 127.63,
       "gla_proj": 2.558,
       "pump_proj": 2.31,
       "changed": false
     },
     {
-      "date": "2026-04-18",
-      "brent_proj": 133.8,
-      "gla_proj": 2.561,
-      "pump_proj": 2.31,
-      "changed": false
-    },
-    {
-      "date": "2026-04-19",
-      "brent_proj": 135.1,
-      "gla_proj": 2.563,
-      "pump_proj": 2.31,
-      "changed": false
-    },
-    {
       "date": "2026-04-20",
-      "brent_proj": 136.14,
-      "gla_proj": 2.565,
+      "brent_proj": 128.54,
+      "gla_proj": 2.56,
+      "pump_proj": 2.31,
+      "changed": false
+    },
+    {
+      "date": "2026-04-21",
+      "brent_proj": 129.27,
+      "gla_proj": 2.561,
       "pump_proj": 2.31,
       "changed": false
     }
