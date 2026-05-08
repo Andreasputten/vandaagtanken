@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-07T09:25:27.530439+00:00",
+  "updated": "2026-05-08T08:17:57.957968+00:00",
   "brent_usd": 118.26,
   "brent_change_pct": 5.7,
   "predicted_pump": 2.551,
@@ -10,35 +10,35 @@
   "nieuws": null,
   "forecast": [
     {
-      "date": "2026-05-08",
+      "date": "2026-05-09",
       "brent_proj": 115.93,
       "gla_proj": 2.547,
       "pump_proj": 2.3,
       "changed": false
     },
     {
-      "date": "2026-05-09",
+      "date": "2026-05-10",
       "brent_proj": 114.07,
       "gla_proj": 2.544,
       "pump_proj": 2.29,
       "changed": true
     },
     {
-      "date": "2026-05-10",
+      "date": "2026-05-11",
       "brent_proj": 112.58,
       "gla_proj": 2.541,
       "pump_proj": 2.29,
       "changed": false
     },
     {
-      "date": "2026-05-11",
+      "date": "2026-05-12",
       "brent_proj": 111.39,
       "gla_proj": 2.539,
       "pump_proj": 2.29,
       "changed": false
     },
     {
-      "date": "2026-05-12",
+      "date": "2026-05-13",
       "brent_proj": 110.44,
       "gla_proj": 2.537,
       "pump_proj": 2.29,
