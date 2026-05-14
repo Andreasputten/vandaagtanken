@@ -3,7 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vandaag Tanken?</title>
+<title>Vandaag Tanken? | Benzine &amp; Diesel Prijsadvies Nederland</title>
+<meta name="description" content="Moet ik vandaag tanken? Dagelijks advies op basis van de actuele benzine- en dieselprijs. Bekijk of de prijs stijgt of daalt de komende dagen.">
+<meta name="keywords" content="vandaag tanken, benzineprijs, dieselprijs, tankadvies, GLA, brandstofprijs nederland">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Vandaag Tanken?">
+<meta property="og:description" content="Dagelijks advies: moet je nu tanken of wachten? Op basis van actuele benzine- en dieselprijzen.">
+<meta property="og:url" content="https://vandaagtanken.nl">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://vandaagtanken.nl">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C1SC40QLR0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C1SC40QLR0');
+</script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -305,6 +323,32 @@
     flex-shrink: 0;
   }
 
+  /* ── Ad slot ── */
+  .ad-wrap {
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1.5rem;
+  }
+  .ad-label {
+    font-size: 0.65rem;
+    color: var(--zacht);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+  }
+  .ad-slot {
+    background: rgba(0,0,0,0.04);
+    border-radius: 10px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px dashed rgba(0,0,0,0.12);
+  }
+  body.bg-ja .ad-slot,
+  body.bg-nee .ad-slot { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+
   /* ── Affiliate ── */
   .affiliate-wrap {
     width: 100%;
@@ -428,6 +472,22 @@
 <div class="forecast-wrap" id="forecastWrap">
   <div class="forecast-titel">Verwachte prijsontwikkeling — 5 dagen</div>
   <div class="forecast-bars" id="forecastBars"></div>
+</div>
+
+<div class="ad-wrap" id="adWrap">
+  <div class="ad-label">Advertentie</div>
+  <div class="ad-slot">
+    <!-- Vervang dit comment door je AdSense code of andere advertentie -->
+    <!-- Voorbeeld Google AdSense:
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    -->
+  </div>
 </div>
 
 <div class="breakdown-wrap" id="breakdownWrap">
