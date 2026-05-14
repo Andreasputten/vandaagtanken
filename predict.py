@@ -23,7 +23,7 @@ from datetime import datetime, timedelta, timezone
 
 # ── Constants ────────────────────────────────────────────────────────────────
 STATION_KORTING_BENZINE = 0.25   # avg discount vs GLA (€/L)
-STATION_KORTING_DIESEL  = 0.30   # avg discount vs GLA diesel (€/L)
+STATION_KORTING_DIESEL  = 0.28   # avg discount vs GLA diesel (€/L)
 
 # Empirical sensitivity: GLA change per $10 Brent move (after lag)
 # Derived from historical NL data: oliemij deel ≈ 51% of GLA
