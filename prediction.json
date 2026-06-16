@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-15T12:56:57.354385+00:00",
+  "updated": "2026-06-16T12:02:56.654271+00:00",
   "brent_usd": 108.0,
   "brent_change_pct": 0.0,
   "predicted_pump": 2.551,
@@ -9,13 +9,6 @@
   "reden": "De pompprijs blijft naar verwachting stabiel de komende dagen.",
   "nieuws": null,
   "forecast": [
-    {
-      "date": "2026-06-16",
-      "brent_proj": 108.0,
-      "gla_proj": 2.551,
-      "pump_proj": 2.3,
-      "changed": false
-    },
     {
       "date": "2026-06-17",
       "brent_proj": 108.0,
@@ -39,6 +32,13 @@
     },
     {
       "date": "2026-06-20",
+      "brent_proj": 108.0,
+      "gla_proj": 2.551,
+      "pump_proj": 2.3,
+      "changed": false
+    },
+    {
+      "date": "2026-06-21",
       "brent_proj": 108.0,
       "gla_proj": 2.551,
       "pump_proj": 2.3,
